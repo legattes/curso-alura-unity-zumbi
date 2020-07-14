@@ -3,24 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : CharacterController, IKillable
 {
-    public float Speed = 10;
-    public int Life = 100;
     public LayerMask GroundMask;
     public GameObject GameOverText;
     public InterfaceController interfaceController;
-
-    private Rigidbody rbPlayer;
-    private Animator animPlayer;
+    
     private Vector3 direction;
-
+    public CharacterStatus status;
+    
     private void Start()
     {
+        status = GetComponent<CharacterStatus>();
         Time.timeScale = 1;
-        rbPlayer = GetComponent<Rigidbody>();
-        animPlayer = GetComponent<Animator>();
-    }
+    } 
 
     void Update()
     {
@@ -29,15 +25,9 @@ public class PlayerController : MonoBehaviour
 
         direction = new Vector3(x,0,z);
 
-        if(direction != Vector3.zero)
-        {
-            animPlayer.SetBool("Running", true);
-        } else
-        {
-            animPlayer.SetBool("Running", false);
-        }
+        AnimateFloat("Running", direction.magnitude);
 
-        if(Life <= 0)
+        if(status.Life <= 0)
         {
             if (Input.GetButtonDown("Fire1"))
             {
@@ -48,8 +38,32 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rbPlayer.MovePosition(rbPlayer.position + (direction * Speed * Time.deltaTime));
+        Move(direction, status.Speed);
 
+        RotateWithMouse();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        status.Life -= damage;
+
+        interfaceController.UpdateLifeSlider();
+
+        if(status.Life <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Time.timeScale = 0;
+        GameOverText.SetActive(true);
+
+    }
+
+    void RotateWithMouse()
+    {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit impact;
 
@@ -58,21 +72,7 @@ public class PlayerController : MonoBehaviour
             Vector3 crosshairDiff = impact.point - transform.position;
             crosshairDiff.y = transform.position.y;
 
-            Quaternion rotation = Quaternion.LookRotation(crosshairDiff);
-            rbPlayer.MoveRotation(rotation);
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        Life -= damage;
-
-        interfaceController.UpdateLifeSlider();
-
-        if(Life <= 0)
-        {
-            Time.timeScale = 0;
-            GameOverText.SetActive(true);
+            Rotate(crosshairDiff);
         }
     }
 }

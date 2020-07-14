@@ -11,16 +11,12 @@ public class InterfaceController : MonoBehaviour
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        LifeSlider.maxValue = playerController.Life;
+        LifeSlider.maxValue = playerController.status.Life;
         UpdateLifeSlider();
-    }
-    
-    void Update()
-    {
     }
 
     public void UpdateLifeSlider()
     {
-        LifeSlider.value = playerController.Life;
+        LifeSlider.value = playerController.status.Life;
     }
 }
