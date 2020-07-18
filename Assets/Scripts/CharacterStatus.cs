@@ -9,7 +9,7 @@ public class CharacterStatus : MonoBehaviour
     public int Life;
     public float Speed = 10;
 
-    void Start()
+    void Awake()
     {
         Life = InitialLife;
     }

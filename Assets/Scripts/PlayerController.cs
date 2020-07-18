@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : CharacterController, IKillable
 {
@@ -15,7 +14,6 @@ public class PlayerController : CharacterController, IKillable
     private void Start()
     {
         status = GetComponent<CharacterStatus>();
-        Time.timeScale = 1;
     } 
 
     void Update()
@@ -26,14 +24,6 @@ public class PlayerController : CharacterController, IKillable
         direction = new Vector3(x,0,z);
 
         AnimateFloat("Running", direction.magnitude);
-
-        if(status.Life <= 0)
-        {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                SceneManager.LoadScene("game");
-            }
-        }
     }
 
     void FixedUpdate()
@@ -57,8 +47,7 @@ public class PlayerController : CharacterController, IKillable
 
     public void Die()
     {
-        Time.timeScale = 0;
-        GameOverText.SetActive(true);
+        interfaceController.GameOver();
 
     }
 
