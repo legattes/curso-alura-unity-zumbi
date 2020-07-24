@@ -7,11 +7,8 @@ public class WeaponController : MonoBehaviour
     public GameObject Bullet;
     public GameObject WeaponPoint;
 
-    void Update()
+    public void Shoot()
     {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Instantiate(Bullet, WeaponPoint.transform.position, WeaponPoint.transform.rotation);
-        }
+        Instantiate(Bullet, WeaponPoint.transform.position, WeaponPoint.transform.rotation);
     }
 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : CharacterController, IKillable
+public class EnemyController : CharacterBaseController, IKillable
 {
     public GameObject Player;
+    public GameObject Medkit;
 
     private CharacterStatus status;
     private Vector3 randomPosition;
@@ -12,26 +13,26 @@ public class EnemyController : CharacterController, IKillable
     private float roamCount;
     private float timeBetweenPositions = 5;
     private int rangeRandomPosition = 15;
+    private float medkitSpawnChance = 0.1f;
+
+    private float distance;
 
     private void Start()
     {
         status = GetComponent<CharacterStatus>();
         Player = GameObject.FindWithTag("Player");
-        RandomSkin();
     }
 
     void FixedUpdate()
     {        
-        float distance = Vector3.Distance(transform.position, Player.transform.position);
+        distance = Vector3.Distance(transform.position, Player.transform.position);
 
-        Rotate(direction);
-        AnimateFloat("Moving", direction.magnitude);
 
-        if(distance > 15)
+        if(distance > 20)
         {
             Roam();
         }
-        else if (distance > 2)
+        else if (distance > 3)
         {
             Hunt();
         } else
@@ -40,16 +41,10 @@ public class EnemyController : CharacterController, IKillable
         }
     }
 
-    void AtacaJogador()
+    void AttackPlayer()
     {
         int damage = Random.Range(20, 30);
         Player.GetComponent<PlayerController>().TakeDamage(damage);
-    }
-
-    void RandomSkin()
-    {
-        int zombieType = Random.Range(1, 27);
-        transform.GetChild(zombieType).gameObject.SetActive(true);
     }
 
     void Roam()
@@ -65,6 +60,8 @@ public class EnemyController : CharacterController, IKillable
         {
             direction = randomPosition - transform.position;
             Move(direction, status.Speed);
+
+            Rotate(direction);
         } else if(roamCount > 3)
         {
             roamCount = 0;
@@ -75,6 +72,9 @@ public class EnemyController : CharacterController, IKillable
     {
         direction = Player.transform.position - transform.position;
 
+        Rotate(direction);
+        AnimateFloat("Moving", direction.magnitude);
+
         Move(direction, status.Speed);
 
         AnimateBool("Attacking", false);
@@ -83,6 +83,8 @@ public class EnemyController : CharacterController, IKillable
     void Attack()
     {
         direction = Player.transform.position - transform.position;
+
+        Rotate(direction);
 
         AnimateBool("Attacking", true);
     }
@@ -109,5 +111,14 @@ public class EnemyController : CharacterController, IKillable
     public void Die()
     {
         Destroy(gameObject);
+        ShouldSpawnMedkit(medkitSpawnChance);
+    }
+
+    void ShouldSpawnMedkit(float percent)
+    {
+        if(Random.value <= percent)
+        {
+            Instantiate(Medkit, transform.position, Quaternion.identity);
+        }
     }
 }

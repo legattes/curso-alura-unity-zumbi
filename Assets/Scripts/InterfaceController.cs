@@ -12,7 +12,7 @@ public class InterfaceController : MonoBehaviour
     public Text TextBestSurvivalTime;
 
     private PlayerController playerController;
-    private float bestSavedScore;
+    private float bestSavedScore = 0;
 
 
     void Start()
@@ -31,19 +31,14 @@ public class InterfaceController : MonoBehaviour
 
     void UpdateBestScore()
     {
-        string text = string.Format("O recorde é de {0}", string.Format("{0}:{1:00}", (int)bestSavedScore / 60, (int)bestSavedScore % 60));
-
         if (Time.timeSinceLevelLoad > bestSavedScore)
         {
             bestSavedScore = Time.timeSinceLevelLoad;
-            TextBestSurvivalTime.text = text;
-            PlayerPrefs.SetFloat("BestScore", bestSavedScore);
         }
 
-        if(TextBestSurvivalTime.text == "")
-        {
-            TextBestSurvivalTime.text = text;
-        }
+        string text = string.Format("O recorde é de {0}", string.Format("{0}:{1:00}", (int)bestSavedScore / 60, (int)bestSavedScore % 60));
+        TextBestSurvivalTime.text = text;
+        PlayerPrefs.SetFloat("BestScore", bestSavedScore);
     }
 
     public void GameOver()

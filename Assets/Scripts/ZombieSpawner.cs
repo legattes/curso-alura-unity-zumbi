@@ -57,7 +57,7 @@ public class ZombieSpawner : MonoBehaviour
     {
         Vector3 position = Random.insideUnitSphere * RangeRandomPosition;
         position += transform.position;
-        position.y = 0;
+        position.y = 1.05f;
 
         return position;
     }

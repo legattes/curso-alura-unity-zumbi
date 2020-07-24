@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float Speed = 20;
+    public float Speed = 50;
     private Rigidbody rbBullet;
+
+    private float yPos;
 
     private void Start()
     {
         rbBullet = GetComponent<Rigidbody>();
+        yPos = rbBullet.position.y;
+        Destroy(gameObject, 10);
     }
 
     void FixedUpdate()
     {
-        rbBullet.MovePosition(rbBullet.position + transform.forward * Speed * Time.deltaTime);
+        rbBullet.MovePosition(new Vector3(rbBullet.position.x, yPos, rbBullet.position.z) + transform.forward * Speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
