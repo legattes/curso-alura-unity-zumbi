@@ -6,6 +6,7 @@ public class EnemyController : CharacterBaseController, IKillable
 {
     public GameObject Player;
     public GameObject Medkit;
+    public ZombieSpawner spawner;
 
     private CharacterStatus status;
     private Vector3 randomPosition;
@@ -53,7 +54,7 @@ public class EnemyController : CharacterBaseController, IKillable
         if(roamCount <= 0)
         {
             randomPosition = RandomPosition();
-            roamCount += timeBetweenPositions;
+            roamCount += timeBetweenPositions + Random.Range(-2f, 2f);
         }
 
         if(Vector3.Distance(transform.position, randomPosition) >= 0.1)
@@ -112,6 +113,7 @@ public class EnemyController : CharacterBaseController, IKillable
     {
         Destroy(gameObject);
         ShouldSpawnMedkit(medkitSpawnChance);
+        spawner.decreaseZombieCounter();
     }
 
     void ShouldSpawnMedkit(float percent)

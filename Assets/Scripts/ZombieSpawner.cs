@@ -12,15 +12,26 @@ public class ZombieSpawner : MonoBehaviour
 
     private float timeCount = 0;
     private GameObject player;
+    private int maxZombieCount = 10;
+    private int zombieCount;
+
+    private float timeToIncreaseDificulty = 10;
+    private float timeDificultyCount;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        timeDificultyCount = timeToIncreaseDificulty;
+        StartCoroutine(GenerateZombie());
     }
     
     void Update()
     {
-        if(Vector3.Distance(transform.position, player.transform.position) > RangePlayerPostion)
+
+        bool hasDistanceToSpawn = Vector3.Distance(transform.position, player.transform.position) > RangePlayerPostion;
+        bool hasReachedMaxZombies = zombieCount < maxZombieCount;
+
+        if (hasDistanceToSpawn && hasReachedMaxZombies)
         {
             timeCount += Time.deltaTime;
 
@@ -29,6 +40,12 @@ public class ZombieSpawner : MonoBehaviour
                 StartCoroutine(GenerateZombie());
                 timeCount = 0;
             }
+        }
+
+        if(Time.timeSinceLevelLoad > timeDificultyCount)
+        {
+            maxZombieCount += 10;
+            timeDificultyCount = Time.timeSinceLevelLoad + timeToIncreaseDificulty;
         }
     }
 
@@ -44,7 +61,15 @@ public class ZombieSpawner : MonoBehaviour
             yield return null;
         }
 
-        Instantiate(Zombie, createPosition, transform.rotation);
+        EnemyController zombie = Instantiate(Zombie, createPosition, transform.rotation).GetComponent<EnemyController>();
+        zombie.spawner = this;
+
+        zombieCount++;
+    }
+
+    public void decreaseZombieCounter()
+    {
+        zombieCount--;
     }
 
     void OnDrawGizmos()
