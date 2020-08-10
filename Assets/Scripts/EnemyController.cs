@@ -7,6 +7,7 @@ public class EnemyController : CharacterBaseController, IKillable
     public GameObject Player;
     public GameObject Medkit;
     public ZombieSpawner spawner;
+    public ZombieAnimator Animator;
 
     private CharacterStatus status;
     private Vector3 randomPosition;
@@ -22,6 +23,7 @@ public class EnemyController : CharacterBaseController, IKillable
     {
         status = GetComponent<CharacterStatus>();
         Player = GameObject.FindWithTag("Player");
+        Animator = GetComponent<ZombieAnimator>();
     }
 
     void FixedUpdate()
@@ -74,11 +76,11 @@ public class EnemyController : CharacterBaseController, IKillable
         direction = Player.transform.position - transform.position;
 
         Rotate(direction);
-        AnimateFloat("Moving", direction.magnitude);
+        Animator.Run(direction);
 
         Move(direction, status.Speed);
 
-        AnimateBool("Attacking", false);
+        Animator.Attack(false);
     }
 
     void Attack()
@@ -87,7 +89,7 @@ public class EnemyController : CharacterBaseController, IKillable
 
         Rotate(direction);
 
-        AnimateBool("Attacking", true);
+        Animator.Attack(true);
     }
 
     Vector3 RandomPosition()

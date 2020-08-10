@@ -2571,6 +2571,7 @@ GameObject:
   - component: {fileID: 692366422424539950}
   - component: {fileID: 692366422924431654}
   - component: {fileID: 822761270}
+  - component: {fileID: 822761278}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2661,8 +2662,9 @@ MonoBehaviour:
     m_Bits: 256
   MoveJoystick: {fileID: 0}
   ShootJoystick: {fileID: 0}
-  interfaceController: {fileID: 0}
-  status: {fileID: 692366422924431654}
+  InterfaceController: {fileID: 0}
+  Status: {fileID: 0}
+  Animator: {fileID: 0}
   initialShootingSpeed: 20
 --- !u!114 &692366422424539950
 MonoBehaviour:
@@ -2707,6 +2709,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Bullet: {fileID: 3671908415601301902, guid: 6994703722797f44b9c43fd9ce8d84c7, type: 3}
   WeaponPoint: {fileID: 1642625686}
+--- !u!114 &822761278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692366422435302754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c450dad533b1441aa06d0a0287795f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &692366422435303774
 GameObject:
   m_ObjectHideFlags: 0

@@ -1860,6 +1860,7 @@ GameObject:
   - component: {fileID: 114010133341707260}
   - component: {fileID: 54148545096179902}
   - component: {fileID: 1382587208}
+  - component: {fileID: 1417500979}
   m_Layer: 11
   m_Name: Zombie
   m_TagString: Enemy
@@ -1916,6 +1917,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   Medkit: {fileID: 1987713744733760, guid: b55df95fa6211964e8ad561501250fac, type: 3}
+  spawner: {fileID: 0}
+  Animator: {fileID: 0}
 --- !u!114 &114010133341707260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1961,6 +1964,18 @@ CapsuleCollider:
   m_Height: 4.5
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1417500979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a182c00d52a566441a09aa82963bed36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &162700
 GameObject:
   m_ObjectHideFlags: 0

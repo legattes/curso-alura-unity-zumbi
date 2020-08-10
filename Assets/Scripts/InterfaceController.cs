@@ -18,7 +18,7 @@ public class InterfaceController : MonoBehaviour
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        LifeSlider.maxValue = playerController.status.Life;
+        LifeSlider.maxValue = playerController.Status.Life;
         UpdateLifeSlider();
         Time.timeScale = 1;
         bestSavedScore = PlayerPrefs.GetFloat("BestScore");
@@ -26,7 +26,7 @@ public class InterfaceController : MonoBehaviour
 
     public void UpdateLifeSlider()
     {
-        LifeSlider.value = playerController.status.Life;
+        LifeSlider.value = playerController.Status.Life;
     }
 
     void UpdateBestScore()

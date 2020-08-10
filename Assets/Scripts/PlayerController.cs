@@ -5,9 +5,14 @@ using UnityEngine;
 public class PlayerController : CharacterBaseController, IKillable, IHealeable
 {
     public LayerMask GroundMask;
-    public FixedJoystick MoveJoystick, ShootJoystick;
-    public InterfaceController interfaceController;
-    public CharacterStatus status;
+    public FixedJoystick MoveJoystick;
+    //public FixedJoystick ShootJoystick;
+
+    public InterfaceController InterfaceController;
+    public CharacterStatus Status;
+    public PlayerAnimator Animator;
+    public int RunOffset = 10;
+    public int IdleOffset = 30;
 
     private Vector3 direction;
     private WeaponController weapon;
@@ -16,38 +21,40 @@ public class PlayerController : CharacterBaseController, IKillable, IHealeable
     
     private void Start()
     {
-        status = GetComponent<CharacterStatus>();
+        Status = GetComponent<CharacterStatus>();
+        Animator = GetComponent<PlayerAnimator>();
         weapon = GetComponent<WeaponController>();
         shootingSpeed = initialShootingSpeed;
     } 
 
     void Update()
     {
-        float x = MoveJoystick.Horizontal;
-        float z = MoveJoystick.Vertical;
+        //float x = MoveJoystick.Horizontal;
+        //float z = MoveJoystick.Vertical;
 
-       // float x = Input.GetAxis("Horizontal");
-       // float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
         
         direction = new Vector3(x, 0, z);
 
-        AnimateFloat("Running", direction.magnitude);
+        Animator.Run(direction.magnitude);
     }
 
     void FixedUpdate()
     {
-        Move(direction, status.Speed);
-        
-        RotateAndShoot();
+        Move(direction, Status.Speed);
+
+        Rotate(direction);
+        //RotateAndShoot();
     }
 
     public void TakeDamage(int damage)
     {
-        status.Life -= damage;
+        Status.Life -= damage;
 
-        interfaceController.UpdateLifeSlider();
+        InterfaceController.UpdateLifeSlider();
 
-        if(status.Life <= 0)
+        if(Status.Life <= 0)
         {
             Die();
         }
@@ -55,7 +62,15 @@ public class PlayerController : CharacterBaseController, IKillable, IHealeable
 
     public void Die()
     {
-        interfaceController.GameOver();
+        InterfaceController.GameOver();
+    }
+
+    public void Rotate(Vector3 direction)
+    {
+        if (direction != Vector3.zero)
+        {
+            Rotate(direction, RunOffset);
+        }
 
     }
 
@@ -73,13 +88,19 @@ public class PlayerController : CharacterBaseController, IKillable, IHealeable
         }
     }*/
 
-    void RotateAndShoot()
+    /*void RotateAndShoot()
     {
-        direction = new Vector3(ShootJoystick.Horizontal, 0, ShootJoystick.Vertical);
+        Vector3 shootDirection = new Vector3(ShootJoystick.Horizontal, 0, ShootJoystick.Vertical);
 
-        if (Vector3.zero != direction)
+        if (shootDirection != Vector3.zero)
         {
-            Rotate(direction, 10);
+            if(direction != Vector3.zero)
+            {
+                Rotate(shootDirection, RunOffset);
+            } else
+            {
+                Rotate(shootDirection, IdleOffset);
+            }
 
             if(shootingSpeed <= 0)
             {
@@ -90,17 +111,22 @@ public class PlayerController : CharacterBaseController, IKillable, IHealeable
                 shootingSpeed--;
             }
         }
+    }*/
+
+    public void Shoot()
+    {
+        weapon.Shoot();
     }
 
     public void Heal(int healingAmount)
     {
-        status.Life += healingAmount;
+        Status.Life += healingAmount;
 
-        if(status.Life > status.InitialLife)
+        if(Status.Life > Status.InitialLife)
         {
-            status.Life = status.InitialLife;
+            Status.Life = Status.InitialLife;
         }
 
-        interfaceController.UpdateLifeSlider();
+        InterfaceController.UpdateLifeSlider();
     }
 }
